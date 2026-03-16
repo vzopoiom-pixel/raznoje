@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Love Forever</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 600, H = 600;
+canvas.width = W;
+canvas.height = H;
+
+const text = 'I love you ';
+let offset = 0;
+
+function heartX(t) {
+  return 16 * Math.pow(Math.sin(t), 3);
+}
+function heartY(t) {
+  return -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2;
+  const cy = H / 2;
+  const scale = 16;
+  const numPoints = 200;
+
+  for (let i = 0; i < numPoints; i++) {
+    const t = (i / numPoints) * 2 * Math.PI;
+    const hx = heartX(t) * scale;
+    const hy = heartY(t) * scale;
+
+    const px = cx + hx;
+    const py = cy + hy;
+
+    const charIndex = (i + Math.floor(offset)) % text.length;
+    const ch = text[charIndex];
+
+    ctx.save();
+    ctx.translate(px, py);
+    ctx.rotate(t);
+    ctx.font = 'bold 24px monospace';
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(120, 0, 0, 0.8)';
+    ctx.strokeText(ch, 0, 0);
+    ctx.fillStyle = 'rgba(220, 0, 0, 0.95)';
+    ctx.fillText(ch, 0, 0);
+    ctx.restore();
+  }
+
+  offset += 0.08;
+  requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+</body>
+</html>
