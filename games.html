@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Игры</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@400;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #0f0c29;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
+    color: #fff;
+    padding: 20px;
+  }
+
+  h1 {
+    font-family: 'Russo One', sans-serif;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: #f9ca24;
+    text-shadow: 0 0 10px #f9ca2488;
+    letter-spacing: 2px;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .tab-btn {
+    background: transparent;
+    border: 2px solid #f9ca24;
+    color: #f9ca24;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: #f9ca24;
+    color: #0f0c29;
+  }
+
+  .game { display: none; }
+  .game.active { display: block; }
+
+  /* === GAME 1: Truth or Dare === */
+  .card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
+    max-width: 480px;
+    margin: 0 auto;
+    backdrop-filter: blur(8px);
+  }
+
+  .card h2 {
+    font-family: 'Russo One', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #f9ca24;
+    text-align: center;
+  }
+
+  .question-box {
+    background: rgba(249,202,36,0.1);
+    border: 1px solid #f9ca2466;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 20px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 11px 24px;
+    border-radius: 30px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn:active { transform: scale(0.96); }
+
+  .btn-truth {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    color: #fff;
+    box-shadow: 0 4px 14px #6c5ce755;
+  }
+
+  .btn-dare {
+    background: linear-gradient(135deg, #e17055, #fd79a8);
+    color: #fff;
+    box-shadow: 0 4px 14px #e1705555;
+  }
+
+  .btn-skip {
+    background: rgba(255,255,255,0.12);
+    color: #ccc;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .tag-truth { background: #6c5ce7; }
+  .tag-dare  { background: #e17055; }
+
+  /* === GAME 2: Superheroes === */
+  .player-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .player-input-row input {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  .player-input-row input:focus {
+    border-color: #f9ca24;
+  }
+
+  .btn-add {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform 0.15s;
+  }
+
+  .btn-add:active { transform: scale(0.96); }
+
+  .players-list {
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .player-chip {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.88rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .player-chip span {
+    cursor: pointer;
+    color: #ff7675;
+    font-weight: 700;
+  }
+
+  .btn-assign {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, #f9ca24, #f0932b);
+    color: #0f0c29;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Russo One', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 20px #f9ca2455;
+  }
+
+  .btn-assign:hover { transform: translateY(-2px); box-shadow: 0 6px 24px #f9ca2466; }
+  .btn-assign:active { transform: scale(0.97); }
+
+  .result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .result-item {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-emoji { font-size: 2rem; }
+
+  .result-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #f9ca24;
+  }
+
+  .result-hero {
+    font-size: 0.88rem;
+    color: #dfe6e9;
+  }
+
+  .info-text {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #aaa;
+    margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+
+<h1>🎮 ИГРЫ</h1>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('tod')">Правда или Действие</button>
+  <button class="tab-btn" onclick="switchTab('hero')">Супергерои</button>
+</div>
+
+<!-- GAME 1: Truth or Dare -->
+<div id="tod" class="game active">
+  <div class="card">
+    <h2>🎯 Правда или Действие</h2>
+    <div id="tag-area"></div>
+    <div class="question-box" id="question-box">Нажмите кнопку, чтобы начать!</div>
+    <div class="btn-row">
+      <button class="btn btn-truth" onclick="getQuestion('truth')">Правда</button>
+      <button class="btn btn-dare"  onclick="getQuestion('dare')">Действие</button>
+      <button class="btn btn-skip"  onclick="skipQuestion()">Повторить вопрос</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME 2: Superheroes -->
+<div id="hero" class="game">
+  <div class="card">
+    <h2>🦸 Распределение ролей</h2>
+    <div class="player-input-row">
+      <input type="text" id="player-name" placeholder="Введите имя игрока..." onkeydown="if(event.key==='Enter')addPlayer()">
+      <button class="btn-add" onclick="addPlayer()">+ Добавить</button>
+    </div>
+    <div class="players-list" id="players-list"></div>
+    <p class="info-text" id="hero-info">Добавьте игроков, затем нажмите кнопку</p>
+    <button class="btn-assign" onclick="assignHeroes()">⚡ Назначить супергероев</button>
+    <div class="result-list" id="result-list"></div>
+  </div>
+</div>
+
+<script>
+// ======= TAB SWITCH =======
+function switchTab(id) {
+  document.querySelectorAll('.game').forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ======= GAME 1: Truth or Dare =======
+const truths = [
+  "Что самое неловкое, что с тобой случалось?",
+  "Какой твой самый большой страх?",
+  "Кого из присутствующих ты считаешь самым смешным?",
+  "Какое твоё самое странное хобби?",
+  "Что ты никогда не признаёшь публично?",
+  "Какой поступок ты больше всего хотел бы не совершать?",
+  "Что тебя раздражает в людях?",
+  "Какой твой самый постыдный музыкальный вкус?",
+  "Что ты делаешь, когда думаешь, что никто не смотрит?",
+  "Кому из присутствующих ты доверяешь больше всего?"
+];
+
+const dares = [
+  "Спой куплет любой песни как можно громче!",
+  "Сделай 10 приседаний прямо сейчас.",
+  "Изобрази животное на выбор других игроков.",
+  "Говори шёпотом следующие 2 минуты.",
+  "Позвони другу и скажи что-то смешное.",
+  "Станцуй без музыки 30 секунд.",
+  "Расскажи анекдот. Если не смешной — повтори задание.",
+  "Съешь что-нибудь необычное из холодильника.",
+  "Сделай смешную гримасу и держи её 10 секунд.",
+  "Комплимент каждому игроку прямо сейчас."
+];
+
+let currentType = null;
+let currentQuestion = null;
+
+function getQuestion(type) {
+  const list = type === 'truth' ? truths : dares;
+  const q = list[Math.floor(Math.random() * list.length)];
+  currentType = type;
+  currentQuestion = q;
+  showQuestion(type, q);
+}
+
+function showQuestion(type, q) {
+  const box = document.getElementById('question-box');
+  const tagArea = document.getElementById('tag-area');
+  box.textContent = q;
+  tagArea.innerHTML = `<div class="tag tag-${type}">${type === 'truth' ? '✅ Правда' : '🔥 Действие'}</div>`;
+}
+
+function skipQuestion() {
+  if (!currentType || !currentQuestion) {
+    document.getElementById('question-box').textContent = 'Сначала выберите «Правда» или «Действие»!';
+    return;
+  }
+  // Repeat the same question
+  showQuestion(currentType, currentQuestion);
+  document.getElementById('question-box').style.animation = 'none';
+  void document.getElementById('question-box').offsetWidth;
+  document.getElementById('question-box').style.animation = 'fadeIn 0.3s ease';
+}
+
+// ======= GAME 2: Superheroes =======
+const heroes = [
+  { name: "Человек-паук",    emoji: "🕷️" },
+  { name: "Железный человек", emoji: "🤖" },
+  { name: "Тор",             emoji: "⚡" },
+  { name: "Чёрная вдова",    emoji: "🕸️" },
+  { name: "Капитан Америка", emoji: "🛡️" },
+  { name: "Халк",            emoji: "💚" },
+  { name: "Доктор Стрэндж",  emoji: "🔮" },
+  { name: "Ванда",           emoji: "🔴" },
+  { name: "Человек-муравей", emoji: "🐜" },
+  { name: "Чёрная пантера",  emoji: "🐾" },
+  { name: "Бэтмен",          emoji: "🦇" },
+  { name: "Супермен",        emoji: "🌟" },
+  { name: "Чудо-женщина",    emoji: "👑" },
+  { name: "Флэш",            emoji: "⚡" },
+  { name: "Аквамен",         emoji: "🌊" },
+];
+
+let players = [];
+
+function addPlayer() {
+  const input = document.getElementById('player-name');
+  const name = input.value.trim();
+  if (!name) return;
+  if (players.length >= heroes.length) {
+    alert(`Максимум ${heroes.length} игроков (столько у нас супергероев!)`);
+    return;
+  }
+  players.push(name);
+  input.value = '';
+  renderPlayers();
+  document.getElementById('result-list').innerHTML = '';
+  updateInfo();
+}
+
+function removePlayer(i) {
+  players.splice(i, 1);
+  renderPlayers();
+  document.getElementById('result-list').innerHTML = '';
+  updateInfo();
+}
+
+function renderPlayers() {
+  const list = document.getElementById('players-list');
+  list.innerHTML = players.map((p, i) =>
+    `<div class="player-chip">${p} <span onclick="removePlayer(${i})">✕</span></div>`
+  ).join('');
+}
+
+function updateInfo() {
+  document.getElementById('hero-info').textContent =
+    players.length === 0
+      ? 'Добавьте игроков, затем нажмите кнопку'
+      : `Игроков: ${players.length} / ${heroes.length}`;
+}
+
+function assignHeroes() {
+  if (players.length === 0) {
+    alert('Добавьте хотя бы одного игрока!');
+    return;
+  }
+  // Shuffle heroes
+  const shuffled = [...heroes].sort(() => Math.random() - 0.5);
+  const resultList = document.getElementById('result-list');
+  resultList.innerHTML = players.map((p, i) =>
+    `<div class="result-item">
+      <div class="hero-emoji">${shuffled[i].emoji}</div>
+      <div>
+        <div class="result-name">${p}</div>
+        <div class="result-hero">${shuffled[i].name}</div>
+      </div>
+    </div>`
+  ).join('');
+}
+</script>
+</body>
+</html>
