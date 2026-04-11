@@ -1,3 +1,4 @@
+#ниже пишкм все нам нужные библеотеки до 8 строчки
 import logging
 import json
 import os
@@ -11,11 +12,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+#ниже у нас важная деталь бота а именно его токен
 BOT_TOKEN = "8648822743:AAFtzxExEPydGn4upj63CQdXc3sTcZ6wnec"
 
 NOTES_FILE = "notes.json"
 
-
+#то что создает и вызывает функцию 
 def load_notes():
     try:
         if os.path.exists(NOTES_FILE):
@@ -33,7 +35,7 @@ def save_notes(notes):
     except Exception as e:
         logger.error(f"Ошибка сохранения: {e}")
 
-
+# бот запускается при команде /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         await update.message.reply_text(
@@ -44,10 +46,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "/delete номер - удалить по номеру\n"
             "/help - справка"
         )
-    except Exception as e:
+    except Exception as e: #выдает ошибку если не правильно
         logger.error(f"Ошибка в start: {e}")
 
-
+# главные функции для бота которые  водить юзер
 async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         await update.message.reply_text(
@@ -112,7 +114,7 @@ async def list_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 message_text,
                 reply_markup=reply_markup
             )
-
+# отвечает за ошибку
     except Exception as e:
         logger.error(f"Ошибка в list: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
@@ -129,7 +131,8 @@ async def delete_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         notes = load_notes()
         user_notes = notes.get(user_id, [])
-
+        
+#если нету заметки
         if idx < 0 or idx >= len(user_notes):
             await query.answer("❌ Заметка не найдена!", show_alert=True)
             return
@@ -184,7 +187,7 @@ async def delete_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         logger.error(f"Ошибка в delete: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
 
-
+# удаляет все заметки созадные пользователем
 async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Удаление всех заметок с подтверждением"""
     try:
@@ -197,7 +200,7 @@ async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
         count = len(notes[user_id])
 
-        # Создаем кнопки подтверждения
+        # Создаем кнопки подтверждения при удалении заметок
         keyboard = [
             [
                 InlineKeyboardButton("✅ Да, удалить все", callback_data="confirm_clear_yes"),
@@ -211,7 +214,7 @@ async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"Это действие необратимо!",
             reply_markup=reply_markup
         )
-
+# выдает ошибку если что то не правильно
     except Exception as e:
         logger.error(f"Ошибка в clear: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
@@ -295,7 +298,7 @@ def main():
     print("✅ Бот готов! Запускаю polling...")
     print("🤖 БОТ ЗАПУЩЕН И РАБОТАЕТ!")
     print("=" * 50)
-
+# конец кода для бота
     try:
         app.run_polling()
     except KeyboardInterrupt:
