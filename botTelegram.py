@@ -15,6 +15,8 @@ InlineKeyboardButton, InlineKeyboardMarkup from telegram.ext import Application,
 #python-telegram-bot docs
 #python-telegram-bot docs
 #Основные компоненты
+
+#import os — это загрузка встроенного модуля для работы с операционной системой.
 #InlineKeyboardButton: Создает отдельную кнопку, которая прикрепляется прямо к сообщению.
 #InlineKeyboardMarkup: Собирает кнопки в сетку (клавиатуру) для отправки.
 #pplication: Основной класс для запуска бота и управления его жизненным циклом.
@@ -25,6 +27,8 @@ InlineKeyboardButton, InlineKeyboardMarkup from telegram.ext import Application,
 #CallbackQueryHandler: Обрабатывает нажатия на inline-кнопки (чтобы бот понял, что пользователь нажал).
 #===============================================================================================================
 
+#logging.basicConfig : это базовая функция позволяющия реагировать на команды пользователя и настраивает модули
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -33,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 # ниже у нас важная деталь бота а именно его токен
 BOT_TOKEN = "8648822743:AAHRQk12BQuqOn7r9yXumbdRya4OC0uSJvk"
-
+# это табличка текстовая
 NOTES_FILE = "notes.json"
 
 
