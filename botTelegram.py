@@ -1,4 +1,4 @@
-#ниже пишкм все нам нужные библеотеки до 8 строчки
+# ниже пишкм все нам нужные библеотеки до 8 строчки
 import logging
 import json
 import os
@@ -6,18 +6,38 @@ from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
+InlineKeyboardButton, InlineKeyboardMarkup from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler что это все только в краткости
+
+
+
+#===============================================================================================================
+#Эти компоненты являются частью библиотеки python-telegram-bot для создания ботов на Python. Вот краткий обзор: 
+#python-telegram-bot docs
+#python-telegram-bot docs
+#Основные компоненты
+#InlineKeyboardButton: Создает отдельную кнопку, которая прикрепляется прямо к сообщению.
+#InlineKeyboardMarkup: Собирает кнопки в сетку (клавиатуру) для отправки.
+#pplication: Основной класс для запуска бота и управления его жизненным циклом.
+#CommandHandler: Реагирует на команды пользователя (например, /start).
+#MessageHandler: Обрабатывает обычные текстовые сообщения или другие типы данных.
+#filters: Набор условий для фильтрации сообщений (например, только текст, только фото).
+#ContextTypes: Позволяет передавать контекст (данные) между функциями бота.
+#CallbackQueryHandler: Обрабатывает нажатия на inline-кнопки (чтобы бот понял, что пользователь нажал).
+#===============================================================================================================
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
-#ниже у нас важная деталь бота а именно его токен
-BOT_TOKEN = "8648822743:AAFtzxExEPydGn4upj63CQdXc3sTcZ6wnec"
+# ниже у нас важная деталь бота а именно его токен
+BOT_TOKEN = "8648822743:AAHRQk12BQuqOn7r9yXumbdRya4OC0uSJvk"
 
 NOTES_FILE = "notes.json"
 
-#то что создает и вызывает функцию 
+
+# то что создает и вызывает функцию
 def load_notes():
     try:
         if os.path.exists(NOTES_FILE):
@@ -35,6 +55,7 @@ def save_notes(notes):
     except Exception as e:
         logger.error(f"Ошибка сохранения: {e}")
 
+
 # бот запускается при команде /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
@@ -46,8 +67,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "/delete номер - удалить по номеру\n"
             "/help - справка"
         )
-    except Exception as e: #выдает ошибку если не правильно
+    except Exception as e:  # выдает ошибку если не правильно
         logger.error(f"Ошибка в start: {e}")
+
 
 # главные функции для бота которые  водить юзер
 async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -114,7 +136,7 @@ async def list_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
                 message_text,
                 reply_markup=reply_markup
             )
-# отвечает за ошибку
+    # отвечает за ошибку
     except Exception as e:
         logger.error(f"Ошибка в list: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
@@ -131,8 +153,8 @@ async def delete_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         notes = load_notes()
         user_notes = notes.get(user_id, [])
-        
-#если нету заметки
+
+        # если нету заметки
         if idx < 0 or idx >= len(user_notes):
             await query.answer("❌ Заметка не найдена!", show_alert=True)
             return
@@ -187,6 +209,7 @@ async def delete_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         logger.error(f"Ошибка в delete: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
 
+
 # удаляет все заметки созадные пользователем
 async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Удаление всех заметок с подтверждением"""
@@ -214,7 +237,7 @@ async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             f"Это действие необратимо!",
             reply_markup=reply_markup
         )
-# выдает ошибку если что то не правильно
+    # выдает ошибку если что то не правильно
     except Exception as e:
         logger.error(f"Ошибка в clear: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
@@ -298,7 +321,7 @@ def main():
     print("✅ Бот готов! Запускаю polling...")
     print("🤖 БОТ ЗАПУЩЕН И РАБОТАЕТ!")
     print("=" * 50)
-# конец кода для бота
+    # конец кода для бота
     try:
         app.run_polling()
     except KeyboardInterrupt:
