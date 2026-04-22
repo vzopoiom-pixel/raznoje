@@ -3,10 +3,10 @@ var wifi = require("wifi");
 var keyboard = require("keyboard");
 
 //вводим данные  о нашей wifi сети
-var PC_IP = "192.168.10.158";
+var PC_IP = "192.168.1.20";
 var PC_PORT = 8080;
-var WIFI_SSID = "Moscicki_2.4G";
-var WIFI_PASS = "In7yni3rsk4";
+var WIFI_SSID = "Orange_Swiatlowod_C990";
+var WIFI_PASS = "HX5JDZLL5RNC";
 // до сюда
 
 var black = display.color(0, 0, 0);
