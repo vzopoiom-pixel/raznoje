@@ -9,8 +9,9 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 
 
+
 #===============================================================================================================
-#Эти компоненты являются частью библиотеки python-telegram-bot для создания ботов на Python. Вот краткий обзор: 
+#Эти компоненты являются частью библиотеки python-telegram-bot для создания ботов на Python. Вот краткий обзор:
 #python-telegram-bot docs
 #python-telegram-bot docs
 #Основные компоненты
@@ -50,7 +51,7 @@ def load_notes():
         pass
     return {}
 
-
+# сохраняет заметки в текстовом формате с помощью Json
 def save_notes(notes):
     try:
         with open(NOTES_FILE, "w", encoding="utf-8") as f:
@@ -63,8 +64,8 @@ def save_notes(notes):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         await update.message.reply_text(
-            "Привет! 👋\n\n"
-            "Команды:\n"
+            "Привет! я бот для заметок созадный студентом Rodion 👋\n\n"
+            "ниже я подал команды которые можно использовать:\n"
             "/add текст - добавить заметку\n"
             "/list - показать заметки (с кнопками удаления!)\n"
             "/delete номер - удалить по номеру\n"
@@ -87,10 +88,10 @@ async def help_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     except Exception as e:
         logger.error(f"Ошибка в help: {e}")
 
-
+#Добавляет новую заметку с текстом и датой в список пользователя и сохраняет в файл.
 async def add_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
-        user_id = str(update.effective_user.id)
+        user_id = str(update.effective_user.id) #Получает ID пользователя и превращает его в строку
 
         if not context.args:
             await update.message.reply_text("Использование: /add [текст]")
@@ -103,8 +104,8 @@ async def add_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             notes[user_id] = []
 
         notes[user_id].append({
-            "text": text,
-            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "text": text,  #заметка
+            "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S") #время например год, месяц, день, час, минута и секунда
         })
 
         save_notes(notes)
@@ -114,6 +115,7 @@ async def add_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         logger.error(f"Ошибка в add: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
 
+# загружает заметки пользователя
 
 async def list_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
@@ -143,8 +145,8 @@ async def list_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     except Exception as e:
         logger.error(f"Ошибка в list: {e}")
         await update.message.reply_text(f"❌ Ошибка: {e}")
-
-
+#=============================================================================================================================
+#Обрабатывает нажатие кнопки удаления: достаёт индекс заметки из данных кнопки и проверяет что такая заметка существует
 async def delete_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Обработка нажатия кнопки удаления"""
     try:
@@ -156,7 +158,7 @@ async def delete_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         notes = load_notes()
         user_notes = notes.get(user_id, [])
-
+# ===============================================================================================================================
         # если нету заметки
         if idx < 0 or idx >= len(user_notes):
             await query.answer("❌ Заметка не найдена!", show_alert=True)
@@ -178,18 +180,21 @@ async def delete_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         logger.error(f"Ошибка в delete_callback: {e}")
         await query.answer(f"❌ Ошибка: {e}", show_alert=True)
 
+#вызывает переменую которая удаляет отправленые сообщения пользователем
+#Удаляет заметку пользователя по номеру из команды /delete [номер]:
+
 
 async def delete_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Удаление по номеру через команду"""
     try:
         user_id = str(update.effective_user.id)
 
-        if not context.args:
+        if not context.args: # если номер не передан, просит ввести его и выходит
             await update.message.reply_text("Использование: /delete [номер]")
             return
 
         try:
-            idx = int(context.args[0]) - 1
+            idx = int(context.args[0]) - 1 #Превращает введённую пользователем строку в индекс список , и если это не число ругается
         except:
             await update.message.reply_text("Введи номер цифрой!")
             return
@@ -197,7 +202,7 @@ async def delete_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         notes = load_notes()
         user_notes = notes.get(user_id, [])
 
-        if idx < 0 or idx >= len(user_notes):
+        if idx < 0 or idx >= len(user_notes): #проверяет не выходит ли номер за границы списка, типо не слишком ли большой номер заметки
             await update.message.reply_text("❌ Неверный номер!")
             return
 
@@ -214,6 +219,7 @@ async def delete_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
 
 # удаляет все заметки созадные пользователем
+#Загружает заметки пользователя а если нет то
 async def clear_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Удаление всех заметок с подтверждением"""
     try:
@@ -301,7 +307,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
 async def error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.error(f"Ошибка: {context.error}")
 
-
+#мы ввызиваем
+#Создаёт бота и регистрирует все обработчики команды, кнопки, текст и ошибки. Затем запускает polling — бот начинает слушать и отвечать на сообщения.
 def main():
     print("⏳ Бот запускается...")
     app = Application.builder().token(BOT_TOKEN).build()
@@ -321,17 +328,17 @@ def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
     app.add_error_handler(error)
 
-    print("✅ Бот готов! Запускаю polling...")
+    print("✅ Бот готов! Запускаю polling...") #Эта строка просто выводит в консоль сообщение о том, что бот запустился и начинает polling.
     print("🤖 БОТ ЗАПУЩЕН И РАБОТАЕТ!")
     print("=" * 50)
     # конец кода для бота
-    try:
+    try: #Запускает бота, и если нажать Ctrl+C — останавливает его
         app.run_polling()
     except KeyboardInterrupt:
         print("\n👋 Бот остановлен")
     except Exception as e:
         print(f"❌ Ошибка: {e}")
 
-
+#Запускает main() если файл запущен напрямую, а не импортирован
 if __name__ == '__main__':
     main()
