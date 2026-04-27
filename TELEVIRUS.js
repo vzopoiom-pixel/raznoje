@@ -266,7 +266,7 @@ void loop() {
     
     // Жесты (тап по экрану)
     if(M5.Touch.getDetail()) {
-        tv.sendOSDMessage("M5Stick Connected!");
+        tv.sendOSDMessage("M5Stick Connected!"); //оповещение о том что стик подключился
         display.showStatus("Touch detected - OSD sent");
     }
     
