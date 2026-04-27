@@ -8,8 +8,8 @@
 #include <HTTPClient.h>
 
 // Конфигурация
-const char* ssid = "Orange_Swiatlowod_C990";
-const char* password = "HX5JDZLL5RNC";
+const char* ssid = "Orange_Swiatlowod_C990"; //информация о назавания wifi
+const char* password = "HX5JDZLL5RNC"; // пароль от wifi
 WebServer server(80);
 
 // IR передатчик (для управления телевизором)
@@ -17,9 +17,9 @@ WebServer server(80);
 IRsend irsend(IR_LED_PIN);
 
 // Wake-on-LAN пакет для включения ПК
-byte macPC[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55}; // MAC вашего ПК
+byte macPC[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55}; // MAC ПК
 
-// Коды пульта Samsung TV (пример)
+// Коды пульта Samsung TV (пример) можно еще добавить подбор ключей
 #define TV_POWER 0xE0E040BF
 #define TV_VOL_UP 0xE0E0E01F
 #define TV_VOL_DOWN 0xE0E0D02F
@@ -52,11 +52,11 @@ public:
         
         int response = http.POST(body);
         if(response == 200) {
-            Serial.println("Сообщение отправлено на TV");
+            Serial.println("Сообщение отправлено на TV"); // отправляет наше за рание подготовленое сообщение на телевизор
         } else {
-            Serial.println("Ошибка отправки на TV");
+            Serial.println("Ошибка отправки на TV"); // выдает ошибку если не получилось подключится/не правильно ведены данные
         }
-        http.end();
+        http.end(); // основной способ подключения 
     }
     
     void sendOSDMessage(String message) {
@@ -105,7 +105,7 @@ public:
         http.end();
     }
 };
-
+// внизу поданы команды которые мы сможем использовать для того чтобы контроливать пк и телевизор 
 class DisplayManager {
 public:
     void showMenu() {
