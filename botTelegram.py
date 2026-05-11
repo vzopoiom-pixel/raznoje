@@ -36,8 +36,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ниже у нас важная деталь бота а именно его токен
-BOT_TOKEN = "8648822743:AAHRQk12BQuqOn7r9yXumbdRya4OC0uSJvk"
-# это табличка текстовая
+BOT_TOKEN = ""# это табличка текстовая
 NOTES_FILE = "notes.json"
 
 
